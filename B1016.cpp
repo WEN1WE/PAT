@@ -1,7 +1,8 @@
 /*
- * int 范围
- * long long 范围
- * 如何取出一个正整数的每一位？
+ * int 范围 2 x 10 ^ 9
+ * long long 范围 9 x 10 ^ 18
+ * 如何取出一个正整数的每一位？ % / 
+ * scanf 的用法 long long 对应 %lld
  */
 
 #include <iostream>
@@ -22,7 +23,8 @@ long long getNewN(long long n, long long d) {
 
 int main() {
     long long n1, n2, d1, d2;
-    cin >> n1 >> d1 >> n2 >> d2;
+    scanf("%lld %lld %lld %lld", &n1, &d1, &n2, &d2);
+    //cin >> n1 >> d1 >> n2 >> d2;
     cout << getNewN(n1, d1) + getNewN(n2, d2);
     return 0;
 }
