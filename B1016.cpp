@@ -1,6 +1,7 @@
 /*
  * int 范围
  * long long 范围
+ * 如何取出一个正整数的每一位？
  */
 
 #include <iostream>
