@@ -1,6 +1,7 @@
 /*
  * cin cout 的用法
  * to_string 的用法
+ * double 的底数部分有2^53，可以表示所有的int
  */
 
 #include <iostream>
