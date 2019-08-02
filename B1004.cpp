@@ -1,3 +1,9 @@
+/*
+ * 1. map<int, vector<string>> mp, 当改变原来赋值时的vector, map中的值仍然不变
+ * 2. 查找元素问题，用map很方便
+ */
+
+
 #include <iostream>
 #include <vector>
 #include <map>
