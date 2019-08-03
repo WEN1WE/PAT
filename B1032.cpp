@@ -30,7 +30,6 @@ int main() {
             highest = it.second;
             bestSchool = it.first;
         }
-        it.second = 1000;
     }
     cout << bestSchool << " " << highest <<endl;
     return 0;
