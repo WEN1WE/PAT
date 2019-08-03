@@ -1,6 +1,6 @@
 /*
  * 1. printf("%c", 'a');
- * 2. 由于scanf使用%c时会讲换行符\n读入，因此需要在合适的地方使用getchar()吸收空格
+ * 2. 由于scanf使用%c时会将换行符\n读入，因此需要在合适的地方使用getchar()吸收空格
  */
 
 #include <iostream>
