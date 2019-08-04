@@ -1,6 +1,6 @@
 /*
  * 1. getchar() 可以接收换行符，转到下一行
- * 2. string s; s.empty; // 判空
+ * 2. string s; s.empty(); // 判空
  */
 #include <iostream>
 #include <algorithm>
