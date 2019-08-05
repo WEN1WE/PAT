@@ -38,7 +38,6 @@ int main() {
     cin >> n >> m;
     vector<Student> students(n);
 
-
     for (int i = 0; i < n; i++) {
         cin >> students[i].ID >> students[i].grades[1] >> students[i].grades[2] >> students[i].grades[3];
         students[i].grades[0] = students[i].grades[1] + students[i].grades[2] + students[i].grades[3];
