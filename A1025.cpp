@@ -43,13 +43,13 @@ int main() {
     vector<Student> students(30000);
 
     for (int i = 0; i < n; i++) {
-        vector<Student> localStudents(300);
         cin >> k;
+        vector<Student> localStudents(k);
         for (int j = 0; j < k; j++) {
             cin >> localStudents[j].id >> localStudents[j].score;
             localStudents[j].locationNumber = i + 1;
         }
-        sort(localStudents.begin(), localStudents.begin() + k, cmp);
+        sort(localStudents.begin(), localStudents.end(), cmp);
         FINALORLOCAL = 1;
         caclRank(localStudents, k);
 
