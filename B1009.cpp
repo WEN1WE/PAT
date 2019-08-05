@@ -4,6 +4,7 @@
  * 3. 在输入字符串后面加" "， 使程序更加统一
  * 4. 更简单的方法是使用cin >> s, 读取一个单词的特性，来收集单词
  * 5. cin >> s 除非到来1. End of file 2. Invalid input, 不然不会停止
+ * 6. ctrl + z enter 告诉系统到达行末尾
  */
 
 #include <iostream>
