@@ -1,6 +1,9 @@
 /*
  * 1. 当vector 传入函数时，传引用，才能改变原来的值
  * 2. 使用char[] 来接收字符串，printf 时就不用使用 myString.c_str();
+ * 3. ? : 简化代码
+ * 4. 开始一直没通过测试3，由于sort的范围太大了
+ * 5. vector 使用push_back 可以不用开始指定大小
  */
 
 #include <iostream>
@@ -29,36 +32,33 @@ void caclRank(vector<Student> & students, int n) {
 }
 
 bool cmp(Student s1, Student s2) {
-    if (s1.score != s2.score) {
-        return s1.score > s2.score;
-    }
-    return s1.id < s2.id;
+    return s1.score == s2.score ? s1.id < s2.id : s1.score > s2.score;
 }
 
 int main() {
     int n;
     cin >> n;
-    int k[n];
+    int k;
     int count = 0;
     vector<Student> students(30000);
 
     for (int i = 0; i < n; i++) {
         vector<Student> localStudents(300);
-        cin >> k[i];
-        for (int j = 0; j < k[i]; j++) {
+        cin >> k;
+        for (int j = 0; j < k; j++) {
             cin >> localStudents[j].id >> localStudents[j].score;
             localStudents[j].locationNumber = i + 1;
         }
-        sort(localStudents.begin(), localStudents.end(), cmp);
+        sort(localStudents.begin(), localStudents.begin() + k, cmp);
         FINALORLOCAL = 1;
-        caclRank(localStudents, k[i]);
+        caclRank(localStudents, k);
 
-        for (int j = 0; j < k[i]; j++) {
+        for (int j = 0; j < k; j++) {
             students[count++] = localStudents[j];
         }
     }
 
-    sort(students.begin(), students.end(), cmp);
+    sort(students.begin(), students.begin() + count, cmp);
     FINALORLOCAL = 0;
     caclRank(students, count);
 
