@@ -2,8 +2,6 @@
  * 1. string 可以用 == 来表示相等 "acc" == "acc"
  * 2. vector<Student> records(n); // 初始化使用的是()
  */
-
-
 #include <iostream>
 #include <vector>
 #include <algorithm>
