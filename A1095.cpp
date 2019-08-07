@@ -1,5 +1,5 @@
 /*
- * 1. strcpy(str1, str2) // 将str2复制到str1
+ * 1. strcpy(str1, str2) // 将str2复制到str1 char* 类型
  */
 
 #include <iostream>
