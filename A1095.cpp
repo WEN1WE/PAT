@@ -4,6 +4,7 @@
  * 3. char *cStr = "C++"; std::string Str = std::string(cStr);  //char * to string
  * 4. map mp; mp.first; mp.second;
  * 5. 本题主要的难点是时间，解决的方法是按照机械的方法数
+ * 6. 本题也可以按照时间序把车子再拍一次，统计每个时刻的车子的数量
  */
 
 #include <iostream>
