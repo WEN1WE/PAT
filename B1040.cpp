@@ -1,3 +1,7 @@
+/*
+ * 1. 本题使用先存储的方法，效率很高
+ */
+
 #include <iostream>
 using namespace std;
 
