@@ -1,51 +1,22 @@
 /*
- * 1. #include <cmath> // pow
- * 2. binarySearch 找到第一个小于等于的值
- * 3. 本题要考虑越界的情况
- * 4. radix 不仅为36
+ * 1. map的key不能使用结构体
+ * 2. 本题容易超时
+ * 3. 放入vector的东西，有自己的一份拷贝
+ * 4. 本题使用map效率太低
+ * 5. 本题的一个坑在于minCost 的取值
+ * 6. 本题传值要传引用才不会超时
  */
 
 #include <iostream>
-#include <algorithm>
+#include <vector>
 using namespace std;
 
-long long toDigit(char c) {
-    if (c >= 'a') {
-        return c - 'a' + 10;
-    } else {
-        return c - '0';
-    }
-}
-
-long long toTen(string s, long long radix) {
-    long long result = 0;
-    for (char c : s) {
-        result = result * radix + toDigit(c);
-        if (result < 0) {  // 越界
-            return -1;
-        }
-    }
-    return result;
-}
-
-long long getLeft(string s) {
-    long long left = -1, temp;
-    for (char c : s) {
-        temp = toDigit(c);
-        if (left <= toDigit(c)) {
-            left = temp + 1;
-        }
-    }
-    return left;
-}
-
-long long binarySearch(string s, long long value) {
-    long long left = getLeft(s), right = value + 1, mid, temp;
-
+int binarySearch(int left, int right, int M, vector<int> & total) {
+    int mid;
+    int start = left;
     while (left < right) {
         mid = (left + right) / 2;
-        temp = toTen(s, mid);
-         if (temp == -1 || temp >= value){
+        if (total[mid] - total[start - 1] >= M) {
             right = mid;
         } else {
             left = mid + 1;
@@ -54,20 +25,40 @@ long long binarySearch(string s, long long value) {
     return left;
 }
 
-int main() {
-    string N1, N2, s1, s2;
-    long long value, radix, temp;
-    int tag;
-    cin >> N1 >> N2 >> tag >> radix;
-    s1 = tag == 1 ? N1 : N2;
-    s2 = tag == 1 ? N2 : N1;
-    value = toTen(s1, radix);
-    temp = binarySearch(s2, value);
+struct Pair {
+    int left;
+    int right;
+} tempPair;
 
-    if (toTen(s2, temp) == value) {
-        cout << temp;
-    } else {
-        cout << "Impossible";
+int main() {
+    int N, M, minCost = 100000010;
+    scanf("%d %d", &N, &M);
+    vector<int> total(N + 1);
+    vector<Pair> pairs;
+
+    for (int i = 1; i < N + 1; i++) {
+        scanf("%d", &total[i]);
+        total[i] += total[i - 1];
+    }
+
+    for (int i = 1; i < N + 1; i++) {
+        int d;
+        tempPair.left = i;
+        tempPair.right = binarySearch(i, N, M, total);
+        d = total[tempPair.right] - total[i - 1];
+        if (d >= M) {
+            if (d == minCost) {
+                pairs.push_back(tempPair);
+            } else if (d < minCost) {
+                minCost = d;
+                pairs.clear();
+                pairs.push_back(tempPair);
+            }
+        }
+    }
+
+    for (auto e : pairs) {
+        printf("%d-%d\n", e.left, e.right);
     }
     return 0;
 }
