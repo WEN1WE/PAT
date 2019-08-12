@@ -2,6 +2,7 @@
  * 1. 要注意，虽然硬币值只有500， 但hashTable 要建1000，防止越界
  * 2. 程序先一定要走几步
  * 3. 本题也可以使用二分查找，但是扣了1分
+ * 4. 本题也可以使用two points
  */
 
 #include <iostream>
@@ -56,4 +57,38 @@ int main() {
     if (!flag) {
         cout << "No Solution";
     }
+}
+
+
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+
+int main() {
+    int n, m, p1, p2;
+    scanf("%d %d", &n, &m);
+    vector<int> coins(n);
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &coins[i]);
+    }
+    p1 = 0;
+    p2 = n - 1;
+    sort(coins.begin(), coins.end());
+
+    while (p1 < p2) {
+        if (coins[p1] + coins[p2] == m) {
+            break;
+        } else if (coins[p1] + coins[p2] < m) {
+            p1++;
+        } else {
+            p2--;
+        }
+    }
+    if (p1 < p2) {
+        printf("%d %d", coins[p1], coins[p2]);
+    } else {
+        printf("No Solution\n");
+    }
+    return 0;
 }
