@@ -38,8 +38,7 @@ int reverse(int n, int radix) {
 int main() {
     int n, radix, value = 0;
 
-    while (scanf("%d", &n) != EOF) {
-        vector<int> record;
+    while (scanf("%d", &n) != EOF) {  // 判断文件尾部，其实没必要
         if (n < 0) {
             break;
         }
