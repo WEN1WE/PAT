@@ -30,7 +30,7 @@ void add(Rational & r1, Rational & r2) {
 void print(Rational r) {
     if (r.denominator == 1) {
         printf("%lld\n", r.numerator);
-    } else if (abs(r.numerator) > r.denominator) {
+    } else if (abs(r.numerator) > abs(r.denominator)) {
         printf("%lld %lld/%lld\n", r.numerator / r.denominator, abs(r.numerator) % r.denominator, r.denominator);
     } else {
         printf("%lld/%lld\n", r.numerator, r.denominator);
