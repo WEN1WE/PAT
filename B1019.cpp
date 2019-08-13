@@ -2,7 +2,7 @@
  * 1. string vector 的 == 都可以直接比较每个元素相同
  * 2. string b = a; //  b有自己的一份拷贝
  * 3. 考虑输入的数字小于1000的情况
- * 4. 添加0的时候，可以用s.insert
+ * 4. 添加0的时候，可以用s.insert  string& insert (size_t pos,   size_t n, char c);
  * 5. 使用do while 就可以保证进行一次循环， 简化代码
  */
 
