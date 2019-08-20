@@ -1,6 +1,7 @@
 /*
  * 1. pow // #include <cmath>
  * 2. 本题主要考深度优先搜索
+ * 3. 题目已经给了root = 0, 所以其实不用求
  */
 
 #include <iostream>
