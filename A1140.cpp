@@ -1,3 +1,6 @@
+/*
+ * 1. 本题也可以使用两个指针i, j来做
+ */
 #include <iostream>
 using namespace std;
 
