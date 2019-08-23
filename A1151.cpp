@@ -1,3 +1,9 @@
+/*
+ * 1. 方法1 996ms, 先记录，再比较的方法太低效
+ * 2. 方法2 100ms, 此方法比较高效，使用递归的方法直接找出LCA
+ * 3. 写程序要严谨， 错一个字母就错来
+ */
+
 #include <iostream>
 #include <map>
 #include <vector>
