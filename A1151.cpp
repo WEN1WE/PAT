@@ -111,7 +111,7 @@ int main() {
             if (deepest == u) {
                 printf("%d is an ancestor of %d.", u, v);
             } else if (deepest == v) {
-                printf("%d is an ancestor of %d.", u, v);
+                printf("%d is an ancestor of %d.", v, u);
             } else {
                 printf("LCA of %d and %d is %d.", u, v, deepest);
             }
