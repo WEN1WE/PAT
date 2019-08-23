@@ -132,3 +132,94 @@ int main() {
 0 8
 4 4
  */
+
+#include <iostream>
+#include <map>
+#include <vector>
+using namespace std;
+
+vector<int> inorder;
+vector<int> preorder;
+map<int, bool> mp;
+
+struct TreeNode {
+    int value;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : value(x), left(NULL), right(NULL) {}
+};
+
+TreeNode* buildTree(int inL, int inR, int preL, int preR) {
+    if (preL > preR) {
+        return NULL;
+    }
+    TreeNode* root = new TreeNode(preorder[preL]);
+
+    for (int i = inL; i <= inR; i++) {
+        if (inorder[i] == root->value) {
+            int len = i - inL;
+            root->left = buildTree(inL, i - 1, preL + 1, preL + len);
+            root->right = buildTree(i + 1, inR, preL + len + 1, preR);
+            break;
+        }
+    }
+    return root;
+}
+
+TreeNode* LCA(TreeNode* root, int val1, int val2) {
+    if (!root || root->value == val1 || root->value == val2)
+        return root;
+
+    auto L = LCA(root->left, val1, val2);
+    auto R = LCA(root->right, val1, val2);
+
+    if (L && R)
+        return root;
+    return L ? L : R;
+}
+
+int main() {
+    int m, n, value;
+    scanf("%d %d", &m, &n);
+
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &value);
+        mp[value] = true;
+        inorder.push_back(value);
+    }
+
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &value);
+        preorder.push_back(value);
+    }
+    TreeNode* root = buildTree(0, n - 1, 0, n - 1);
+
+    for (int i = 0; i < m; i++) {
+        int u, v;
+        scanf("%d %d", &u, &v);
+        int flag1 = mp.find(u) == mp.end();
+        int flag2 = mp.find(v) == mp.end();
+
+        if (flag1 && flag2) {
+            printf("ERROR: %d and %d are not found.", u, v);
+        } else if (flag1) {
+            printf("ERROR: %d is not found.", u);
+        } else if (flag2) {
+            printf("ERROR: %d is not found.", v);
+        } else {
+            int lowest = LCA(root, u, v)->value;
+            if (u == lowest) {
+                printf("%d is an ancestor of %d.", u, v);
+            } else if (v == lowest) {
+                printf("%d is an ancestor of %d.", v, u);
+            } else {
+                printf("LCA of %d and %d is %d.", u, v, lowest);
+            }
+        }
+        printf("\n");
+    }
+    return 0;
+}
+
+
+
