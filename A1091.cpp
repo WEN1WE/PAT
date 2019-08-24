@@ -1,3 +1,9 @@
+/*
+ * 1. 本题使用三维数组比较方便
+ * 2. 题目最后时 > T, 不是2
+ * 3. 若使用深度优先搜索，会使深度太大
+ */
+
 #include <iostream>
 #include <vector>
 #include <queue>
@@ -56,7 +62,7 @@ int main() {
     scanf("%d %d %d %d", &m, &n, &L, &T);
     build(graph);
     build(hashTable);
-    
+
     for (int i = 0; i < L; i++) {
         for (int j = 0; j < m; j++) {
             for (int k = 0; k < n; k++) {
@@ -65,13 +71,13 @@ int main() {
             }
         }
     }
-    //vector<vector<vector<bool>>> g = graph;
+
     for (int i = 0; i < L; i++) {
         for (int j = 0; j < m; j++) {
             for (int k = 0; k < n; k++) {
                 if(reasonable(k, j, i)) {
                     bfs(k, j, i);
-                    if (cnt >= 2) {
+                    if (cnt >= T) {
                         totalVolume += cnt;
                     }
                     cnt = 0;
@@ -80,6 +86,6 @@ int main() {
         }
     }
     cout << totalVolume;
-    
+
     return 0;
 }
