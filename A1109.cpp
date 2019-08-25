@@ -1,3 +1,7 @@
+/*
+ * 1. 先分类，然后使用两个指针填写数字
+ */
+
 #include <iostream>
 #include <vector>
 #include <algorithm>
