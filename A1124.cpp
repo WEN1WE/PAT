@@ -1,3 +1,7 @@
+/*
+ * 1. 理清题意，一步一步数
+ */
+
 #include <iostream>
 #include <map>
 #include <vector>
