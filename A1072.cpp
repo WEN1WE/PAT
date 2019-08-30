@@ -1,3 +1,7 @@
+/*
+ * 1. 理解题意，熟悉基本的数据结构
+ */
+
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -10,8 +14,8 @@ int dist[MAX];
 int visited[MAX];
 
 void init() {
-    fill(graph[0], graph[0] + MAX * MAX, INF);
     fill(dist, dist + MAX, INF);
+    fill(visited, visited + MAX, false);
 }
 
 int toID(string & s) {
@@ -28,7 +32,7 @@ int toID(string & s) {
 int findMin() {
     int v = -1;
     int minDist = INF;
-    
+
     for (int w = 1; w <= N + M; w++) {
         if (!visited[w] && dist[w] < minDist) {
             minDist = dist[w];
@@ -50,7 +54,7 @@ void relax(int v) {
 
 void Dijkstra(int s) {
     dist[s] = 0;
-    
+
     for (int i = 1; i <= N + M; i++) {
         int v = findMin();
         if (v == -1) {
@@ -62,7 +66,7 @@ void Dijkstra(int s) {
 }
 
 int main() {
-    init();
+    fill(graph[0], graph[0] + MAX * MAX, INF);
     scanf("%d %d %d %d", &N, &M, &K, &D);
 
     for (int i = 0; i < K; i++) {
@@ -74,34 +78,46 @@ int main() {
         graph[id1][id2] = d;
         graph[id2][id1] = d;
     }
-    
+
     int minDist = -1;
     int gasStation = 0;
     int totalDist = INF;
     double avgDist;
     for (int i = N + 1; i <= N + M; i++) {
+        init();
+        bool flag = true;
         int tempMin = INF;
-        double tempTotal = 0;
+        int tempTotal = 0;
         Dijkstra(i);
         for (int j = 1; j <= N; j++) {
+            if (dist[j] > D) {
+                flag = false;
+                break;
+            }
             if (dist[j] < tempMin) {
                 tempMin = dist[j];
             }
             tempTotal += dist[j];
         }
-        if (tempMin > minDist) {
-            gasStation = i;
-            minDist = tempMin;
-            totalDist = tempTotal;
-        } else if (tempMin == minDist) {
-            if (tempTotal < totalDist) {
+        if (flag) {
+            if (tempMin > minDist) {
                 gasStation = i;
+                minDist = tempMin;
                 totalDist = tempTotal;
+            } else if (tempMin == minDist) {
+                if (tempTotal < totalDist) {
+                    gasStation = i;
+                    totalDist = tempTotal;
+                }
             }
         }
     }
-    avgDist = totalDist * 1.0 / N;
-    printf("G%d\n", gasStation - N);
-    printf("%.1f %.1f", minDist * 1.0, avgDist);
+    if (totalDist == INF) {
+        printf("No Solution\n");
+    } else {
+        avgDist = totalDist * 1.0 / N;
+        printf("G%d\n", gasStation - N);
+        printf("%.1f %.1f", minDist * 1.0, avgDist);
+    }
     return 0;
 }
