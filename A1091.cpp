@@ -2,6 +2,7 @@
  * 1. 本题使用三维数组比较方便
  * 2. 题目最后时 > T, 不是2
  * 3. 若使用深度优先搜索，会使深度太大
+ * 4. 进队列的时候，进行标记，而不是出队列的时候
  */
 
 #include <iostream>
@@ -87,5 +88,70 @@ int main() {
     }
     cout << totalVolume;
 
+    return 0;
+}
+
+
+#include <iostream>
+#include <queue>
+using namespace std;
+
+struct Point {
+    int z;
+    int y;
+    int x;
+};
+
+int M, N, L, T;
+bool graph[65][1300][130];
+bool visited[65][1300][130];
+queue<Point> q;
+int cnt;
+
+void toQueue(int z, int y, int x) {
+    if (z >= 0 && z < L && y >= 0 && y < M && x >= 0 && x < N && !visited[z][y][x] && graph[z][y][x]) {
+        visited[z][y][x] = true;
+        q.push({z, y, x});
+        cnt++;
+    }
+}
+
+void bfs(int z, int y, int x) {
+    toQueue(z, y, x);
+    while (!q.empty()) {
+        Point p = q.front();
+        q.pop();
+        toQueue(p.z + 1, p.y, p.x);
+        toQueue(p.z - 1, p.y, p.x);
+        toQueue(p.z, p.y + 1, p.x);
+        toQueue(p.z, p.y - 1, p.x);
+        toQueue(p.z, p.y, p.x + 1);
+        toQueue(p.z, p.y, p.x - 1);
+    }
+}
+
+int main() {
+    scanf("%d %d %d %d", &M, &N, &L, &T);
+    for (int i = 0; i < L; i++) {
+        for (int j = 0; j < M; j++) {
+            for (int k = 0; k < N; k++) {
+                scanf("%d", &graph[i][j][k]);
+            }
+        }
+    }
+    
+    int total = 0;
+    for (int i = 0; i < L; i++) {
+        for (int j = 0; j < M; j++) {
+            for (int k = 0; k < N; k++) {
+                bfs(i, j, k);
+                if (cnt >= T) {
+                    total += cnt;
+                }
+                cnt = 0;
+            }
+        }
+    }
+    printf("%d\n", total);
     return 0;
 }
