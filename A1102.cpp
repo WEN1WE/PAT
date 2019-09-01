@@ -85,3 +85,87 @@ int main() {
     
     return 0;
 }
+
+
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+
+struct TreeNode {
+    int left = -1;
+    int right = -1;
+};
+vector<TreeNode> tree;
+vector<int> levelorder;
+vector<int> inorder;
+
+void getLevelorder(int root) {
+    queue<int> q;
+    q.push(root);
+    
+    while (!q.empty()) {
+        int node = q.front();
+        levelorder.push_back(node);
+        q.pop();
+        if (tree[node].left != -1) {
+            q.push(tree[node].left);
+        }
+        if (tree[node].right != -1) {
+            q.push(tree[node].right);
+        }
+    }
+}
+
+void getInorder(int root) {
+    if (root == -1) {
+        return;
+    }
+    getInorder(tree[root].left);
+    inorder.push_back(root);
+    getInorder(tree[root].right);
+}
+
+void print(vector<int> & v) {
+    for (int i = 0; i < v.size(); i++) {
+        if (i != 0) {
+            printf(" ");
+        }
+        printf("%d", v[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int N, root = -1;
+    scanf("%d", &N);
+    vector<bool> table(N);
+    tree.resize(N);
+    
+    for (int i = 0; i < N; i++) {
+        string left, right;
+        cin >> right >> left;
+        if (left != "-") {
+            tree[i].left = stoi(left);
+            table[stoi(left)] = true;
+        }
+        if (right != "-") {
+            tree[i].right = stoi(right);
+            table[stoi(right)] = true;
+        }
+    }
+    
+    for(int i = 0; i < N; i++) {
+        if (!table[i]) {
+            root = i;
+            break;
+        }
+    }
+    getLevelorder(root);
+    getInorder(root);
+    
+    print(levelorder);
+    print(inorder);
+    
+    return 0;
+}
