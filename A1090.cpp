@@ -47,3 +47,48 @@ int main() {
     printf("%.2f %d", highestPrice, cnt);
     return 0;
 }
+
+
+#include <iostream>
+#include <vector>
+#include <cmath>
+using namespace std;
+
+const int MAX = 100010;
+vector<int> graph[MAX];
+int deepest = 0;
+int cnt;
+void dfs(int root, int level) {
+    if (graph[root].empty()) {
+        if (level > deepest) {
+            deepest = level;
+            cnt = 1;
+        } else if (level == deepest) {
+            cnt++;
+        }
+        return;
+    }
+    for (auto e : graph[root]) {
+        dfs(e, level + 1);
+    }
+}
+
+int main() {
+    int N, root = -1, index;
+    double P, r;
+    scanf("%d %lf %lf", &N, &P, &r);
+    r = r / 100;
+    
+    for (int i = 0; i < N; i++) {
+        scanf("%d", &index);
+        if (index == -1) {
+            root = i;
+        } else {
+            graph[index].push_back(i);
+        }
+    }
+    
+    dfs(root, 0);
+    printf("%.2f %d\n", P * pow(1 + r, deepest), cnt);
+    return 0;
+}
