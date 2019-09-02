@@ -25,7 +25,7 @@ bool insertionSort() {
         if (i != 2 && partially == tempInitial) {
             flag = true;
         }
-        sort(tempInitial.begin() + 1, tempInitial.begin() + i + 1);
+        sort(tempInitial.begin(), tempInitial.begin() + i + 1);
     }
     return flag;
 }
