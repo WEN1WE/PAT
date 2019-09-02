@@ -6,16 +6,16 @@
 using namespace std;
 
 int main() {
-    double value, result = 0;
-    int n, index = 0;
-    cin >> n;
-
-    while (index < n) {
-        cin >> value;
-        result += (n - index) * value * (index + 1);
-        index++;
+    int N;
+    scanf("%d", &N);
+    double total = 0;
+    
+    for (int i = 1; i <= N; i++) {
+        double value;
+        scanf("%lf", &value);
+        total += value * i * (N + 1 - i);
     }
-
-    printf("%.2f", result);
+    
+    printf("%.2f", total);
     return 0;
 }
