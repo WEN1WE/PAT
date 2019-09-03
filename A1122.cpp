@@ -7,50 +7,55 @@
  */
 
 #include <iostream>
+#include <map>
 #include <vector>
-#include <set>
 using namespace std;
 
-int main() {
-    int n = 0, m = 0;
-    scanf("%d %d", &n, &m);
-    bool graph[210][210];
+int N, M, K;
+const int MAX = 210;
+bool graph[MAX][MAX];
+map<int, bool> mp;
 
-    for (int i = 1; i <= m; i++) {
+bool check(vector<int> & record) {
+    if (record.size() != N + 1 || record[0] != record[record.size() - 1]) {
+        return false;
+    }
+    for (int i = 0; i < N; i++) {
+        if (graph[record[i]][record[i + 1]]) {
+            mp[record[i]] = true;
+            mp[record[i + 1]] = true;
+        } else {
+            return false;
+        }
+    }
+    return mp.size() == N;
+}
+
+
+int main() {
+    scanf("%d %d", &N, &M);
+    
+    for (int i = 0; i < M; i++) {
         int v1, v2;
         scanf("%d %d", &v1, &v2);
         graph[v1][v2] = true;
         graph[v2][v1] = true;
     }
-
-    int k;
-    scanf("%d", &k);
-    for (int i = 0; i < k; i++) {
-        bool flag = true;
-        int len;
-        scanf("%d", &len);
-        vector<int> path(len);
-        set<int> st;
-        for (int j = 0; j < len; j++) {
-            scanf("%d", &path[j]);
-            st.insert(path[j]);
+    
+    scanf("%d", &K);
+    for (int i = 0; i < K; i++) {
+        int n;
+        scanf("%d", &n);
+        vector<int> record(n);
+        for (int j = 0; j < n; j++) {
+            scanf("%d", &record[j]);
         }
-
-        if (len - 1 != n || st.size() != n || path[0] != path[len - 1]) {
-            printf("NO\n");
-            continue;
-        }
-
-        for (int j = 0; j < len - 1; j++) {
-            if (!graph[path[j]][path[j + 1]]) {
-                flag = false;
-                printf("NO\n");
-                break;
-            }
-        }
-        if (flag) {
+        if (check(record)) {
             printf("YES\n");
+        } else {
+            printf("NO\n");
         }
+        mp.clear();
     }
     return 0;
 }
