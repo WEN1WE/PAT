@@ -10,59 +10,57 @@
 using namespace std;
 
 const int MAX = 10010;
-vector<int> father(MAX);
+vector<int> parent(MAX);
 
 void init() {
-    for (int i = 0; i < father.size(); i++) {
-        father[i] = i;
+    for (int i = 0; i < MAX; i++) {
+        parent[i] = i;
     }
 }
 
-int root(int k) {
-    while (k != father[k]) {
-        father[k] = father[father[k]];
-        k = father[k];
+int root(int i) {
+    while (i != parent[i]) {
+        parent[i] = parent[parent[i]];
+        i = parent[i];
     }
-    return k;
+    return i;
 }
 
-void Union(int k1, int k2) {
-    int root1 = root(k1);
-    int root2 = root(k2);
-    if (root1 != root2) {
-        father[root1] = root2;
+void Union(int i, int j) {
+    int r1 = root(i);
+    int r2 = root(j);
+    if (r1 != r2) {
+        parent[r1] = r2;
     }
 }
 
 int main() {
     init();
-    int n, nOfBirds = 0;
-    scanf("%d", &n);
-    map<int, bool> mp;
+    int N, K, Q, first, other;
+    scanf("%d", &N);
+    map<int, bool> birdCount;
+    map<int, bool> treeCount;
     
-    for (int i = 0; i < n; i++) {
-        int k, id, first;
-        scanf("%d", &k);
-        scanf("%d", &first);
-        nOfBirds = max(nOfBirds, first);
-        for (int j = 1; j < k; j++) {
-            scanf("%d", &id);
-            nOfBirds = max(nOfBirds, id);
-            Union(id, first);
+    for (int i = 0; i < N; i++) {
+        scanf("%d %d", &K, &first);
+        birdCount[first] = true;
+        for (int j = 1; j < K; j++) {
+            scanf("%d", &other);
+            birdCount[other] = true;
+            Union(first, other);
         }
     }
     
-    for (int i = 1; i <= nOfBirds; i++) {
-        mp[root(i)] = true;
+    for (auto e : birdCount) {
+        treeCount[root(e.first)] = true;
     }
-    cout << mp.size() << " " << nOfBirds << endl;
+    printf("%d %d\n", treeCount.size(), birdCount.size());
+    scanf("%d", &Q);
     
-    int q;
-    scanf("%d", &q);
-    for (int i = 0; i < q; i++) {
-        int id1, id2;
-        scanf("%d %d", &id1, &id2);
-        if (root(id1) == root(id2)) {
+    for (int i = 0; i < Q; i++) {
+        int b1, b2;
+        scanf("%d %d", &b1, &b2);
+        if (root(b1) == root(b2)) {
             printf("Yes\n");
         } else {
             printf("No\n");
