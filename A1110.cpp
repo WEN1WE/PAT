@@ -1,6 +1,6 @@
 /*
- * 1. 本题可以用层序遍历，然后比较
- * 2. 也可以使用深度优先搜索，求出最大的下标，然后与n进行比较，不同则二叉树没有满
+ * 1. 本题使用层序遍历来判断满二叉树的方法很厉害
+ * 2. 判断满二叉树不能使用递归，左满 右满 与 整个树满不等价
  */
 
 #include <iostream>
@@ -8,87 +8,78 @@
 #include <queue>
 using namespace std;
 
-const int MAX = 30;
 struct TreeNode {
     int left = -1;
     int right = -1;
 };
+vector<TreeNode> graph;
+vector<int> levelorder;
 
-int n;
-vector<TreeNode> graph(MAX);
-vector<int> leverorder;
-bool table[MAX] = {false};
-
-void getLeverorder(int root) {
+bool bfs(int root) {
     queue<int> q;
     q.push(root);
+    bool flag = true;
     
     while (!q.empty()) {
-        int current = q.front();
-        leverorder.push_back(current);
-        if (graph[current].left != -1) {
-            q.push(graph[current].left);
-        }
-        if (graph[current].right != -1) {
-            q.push(graph[current].right);
-        }
+        int node = q.front();
+        levelorder.push_back(node);
         q.pop();
-    }
-}
-
-bool isCBT(int index) {
-    int leftIndex = index * 2;
-    int rightIndex = leftIndex + 1;
-    int root = leverorder[index];
-
-    if (leftIndex > n) {
-        return true;
-    }
-    
-    if (leverorder[leftIndex] != graph[root].left) {
-        return false;
-    }
-    if (rightIndex <= n) {
-        if (leverorder[rightIndex] != graph[root].right) {
-            return false;
+        if (graph[node].left != -1) {
+            if (flag) {
+                q.push(graph[node].left);
+            }
+            else {
+                return false;
+            }
+        } else {
+            flag = false;
+        }
+        if (graph[node].right != -1) {
+            if (flag) {
+                q.push(graph[node].right);
+            }
+            else {
+                return false;
+            }
+        } else {
+            flag = false;
         }
     }
-    
-    return isCBT(leftIndex) && isCBT(rightIndex);
+    return true;
 }
 
 int main() {
-    leverorder.push_back(-1);
-    int root = 0; 
-    string left, right;
-    cin >> n;
+    int N, root = -1;
+    scanf("%d", &N);
+    graph.resize(N);
+    vector<bool> table(N);
     
-
-    for (int i = 0; i < n; i++) {
-        cin >> left >> right;
-        if (left != "-") {
-            graph[i].left = stoi(left);
-            table[graph[i].left] = true;
+    for (int i = 0; i < N; i++) {
+        string s1, s2;
+        cin >> s1 >> s2;
+        if (s1 != "-") {
+            int node = stoi(s1);
+            graph[i].left = node;
+            table[node] = true;
+            
         }
-        if (right != "-") {
-            graph[i].right = stoi(right);
-            table[graph[i].right] = true;
+        if (s2 != "-") {
+            int node = stoi(s2);
+            graph[i].right = node;
+            table[node] = true;
         }
     }
     
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < N; i++) {
         if (!table[i]) {
             root = i;
-            break;
         }
     }
     
-    getLeverorder(root);
-    
-    if (isCBT(1)) {
-        printf("YES %d", leverorder[n]);
+    if (bfs(root)) {
+        printf("YES %d", levelorder[N - 1]);
     } else {
         printf("NO %d", root);
     }
-    return 0;
+    
 }
