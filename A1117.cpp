@@ -8,27 +8,27 @@
 #include <algorithm>
 using namespace std;
 
-bool cmp(int i, int j) {
-    return i > j;
+bool cmp(int x, int y) {
+    return x > y;
 }
 
 int main() {
-    int n, E = 0; 
-    scanf("%d", &n);
-    vector<int> record(n);
-    for (int i = 0; i < n; i++) {
+    int N, E = 0;
+    scanf("%d", &N);
+    vector<int> record(N);
+    for (int i = 0; i < N; i++) {
         scanf("%d", &record[i]);
     }
     sort(record.begin(), record.end(), cmp);
     
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < N; i++) {
         if (record[i] > i + 1) {
-            E = i + 1;
+            E++;
         } else {
             break;
         }
     }
-    cout << E << endl;
-
+    cout << E;
+    
     return 0;
 }
