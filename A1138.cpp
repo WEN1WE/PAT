@@ -8,41 +8,38 @@
 #include <vector>
 using namespace std;
 
-int getFirst(vector<int> & preorder, vector<int> & inorder, int preL, int preR, int inL, int inR) {
+vector<int> preorder;
+vector<int> inorder;
+
+int find(int preL, int preR, int inL, int inR) {
     if (preL == preR) {
         return preorder[preL];
     }
     int root = preorder[preL];
     for (int i = inL; i <= inR; i++) {
         if (inorder[i] == root) {
-            if (i == inL) {
-                return getFirst(preorder, inorder, preL + 1, preR, inL + 1, inR);
+            int len = i - inL;
+            if (len != 0) {
+                return find(preL + 1, preL + len, inL, i - 1);
             } else {
-                int len = i - inL;
-                return getFirst(preorder, inorder, preL + 1, preL + len, inL, i - 1);
+                return find(preL + len + 1, preR, i + 1, inR);
             }
         }
     }
 }
 
 int main() {
-    ios::sync_with_stdio(false);
-    int n;
-    cin >> n;
-    vector<int> preorder(n);
-    vector<int> inorder(n);
+    int N;
+    scanf("%d", &N);
+    preorder.resize(N);
+    inorder.resize(N);
     
-    for (int i = 0; i < n; i++) {
-        cin >> preorder[i];
+    for (int i = 0; i < N; i++) {
+        scanf("%d", &preorder[i]);
     }
-    for (int i = 0; i < n; i++) {
-        cin >> inorder[i];
+    for (int i = 0; i < N; i++) {
+        scanf("%d", &inorder[i]);
     }
-    
-    int first = getFirst(preorder, inorder, 0, n - 1, 0, n - 1);
-    
-    cout << first << endl;
-    
+    cout << find(0, N - 1, 0, N - 1) << endl;
     return 0;
-    
 }
