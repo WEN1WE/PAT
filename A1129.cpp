@@ -60,3 +60,55 @@ int main() {
     }
     return 0;
 }
+
+
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+using namespace std;
+
+const int MAX = 50010;
+vector<int> cnt(MAX);
+
+bool cmp(int id1, int id2) {
+    if (cnt[id1] != cnt[id2]) {
+        return cnt[id1] > cnt[id2];
+    } else {
+        return id1 < id2;
+    }
+}
+
+int main() {
+    int N, K, indices;
+    scanf("%d %d", &N, &K);
+    vector<bool> isIn(MAX);
+    vector<int>  recommend(K);
+    
+    for (int i = 0; i < N; i++) {
+        scanf("%d", &indices);
+        if (i != 0) {
+            printf("%d:", indices);
+            for (int e : recommend) {
+                if (cnt[e] == 0) {
+                    break;
+                }
+                printf(" %d", e);
+            }
+            printf("\n");
+        }
+        cnt[indices]++;
+        if (isIn[indices]) {
+            sort(recommend.begin(), recommend.end(), cmp);
+        } else {
+            if (cmp(indices, recommend[K - 1])) {
+                isIn[indices] = true;
+                isIn[recommend[K - 1]] = false;
+                recommend[K - 1] = indices;
+                sort(recommend.begin(), recommend.end(), cmp);
+            }
+        }
+        
+    }
+    return 0;
+}
