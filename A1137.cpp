@@ -5,66 +5,73 @@
  */
 
 #include <iostream>
-#include <map>
 #include <vector>
-#include <algorithm>
+#include <map>
 #include <cmath>
+#include <algorithm>
 using namespace std;
 
 struct Student {
-    string name;
+    string id;
     int online = -1;
     int midterm = -1;
     int final = -1;
     int grade = -1;
 };
 
-bool cmp(Student s1, Student s2) {
-    return s1.grade == s2.grade ? s1.name < s2.name : s1.grade > s2.grade;
+bool check(Student & s) {
+    if (s.online < 200 || s.online > 900) {
+        return false;
+    } else {
+        if (s.midterm > s.final) {
+            s.grade = int(round(0.4 * s.midterm + 0.6 * s.final));
+        } else {
+            s.grade = s.final;
+        }
+        return s.grade >= 60;
+    }
+}
+
+bool cmp(Student & s1, Student & s2) {
+    if (s1.grade != s2.grade) {
+        return s1.grade > s2.grade;
+    } else {
+        return s1.id < s2.id;
+    }
 }
 
 int main() {
-    int p, m, n;
-    string name;
-    cin >> p >> m >> n;
+    int P, M, N;
+    scanf("%d %d %d", &P, &M, &N);
+    int score;
+    string id;
     map<string, Student> mp;
-    vector<Student> students;
-    
-    for (int i = 0; i < p; i++) {
-        cin >> name;
-        mp[name].name = name;
-        cin >> mp[name].online;
+    vector<Student> result;
+
+    for (int i = 0; i < P; i++) {
+        cin >> id >> score;
+        mp[id].id = id;
+        mp[id].online = score;
     }
-    
-    for (int i = 0; i < m; i++) {
-        cin >> name;
-        mp[name].name = name;
-        cin >> mp[name].midterm;
+    for (int i = 0; i < M; i++) {
+        cin >> id >> score;
+        mp[id].id = id;
+        mp[id].midterm = score;
     }
-    
-    for (int i = 0; i < n; i++) {
-        cin >> name;
-        mp[name].name = name;
-        cin >> mp[name].final;
-    }
-    
-    for (auto & e : mp) {
-        if (e.second.midterm > e.second.final) {
-            e.second.grade = round(e.second.midterm * 0.4 + e.second.final * 0.6);
-        } else {
-            e.second.grade = e.second.final;
-        }
-        
-        if (e.second.online >= 200 && e.second.grade >= 60 && e.second.grade <= 100) {
-            students.push_back(e.second);
-        }
-    }
-    
-    sort(students.begin(), students.end(), cmp);
-    
-    for (auto e : students) {
-        printf("%s %d %d %d %d\n", e.name.c_str(), e.online, e.midterm, e.final, e.grade);
+    for (int i = 0; i < N; i++) {
+        cin >> id >> score;
+        mp[id].id = id;
+        mp[id].final = score;
     }
 
+    for (auto e : mp) {
+        if (check(e.second)) {
+            result.push_back(e.second);
+        }
+    }
+    sort(result.begin(), result.end(), cmp);
+    for (int i = 0; i < result.size(); i++) {
+        printf("%s %d %d %d %d\n", result[i].id.c_str(), result[i].online, result[i].midterm, result[i].final, result[i].grade);
+    }
     return 0;
 }
