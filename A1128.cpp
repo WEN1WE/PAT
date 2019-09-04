@@ -1,47 +1,32 @@
+/*
+ * 1. 此题与图的tour的方法类似，比较全部搜集的数据与应该得到的数据大小关系
+ */
+
 #include <iostream>
-#include <vector>
+#include <map>
 using namespace std;
-const int MAX = 2000;
 
 int main() {
-    int k;
-    scanf("%d", &k);
+    int K, N;
+    scanf("%d", &K);
     
-    for (int i = 0; i < k; i++) {
-        int n;
-        bool flag = true;
-        scanf("%d", &n);
-        vector<int> rows(n + 1);
-        
-        bool table1[MAX] = {false};
-        bool table2[MAX] = {false};
-        bool table3[MAX] = {false};
-
-        for (int j = 1; j <= n; j++) {
-            cin >> rows[j];
+    for (int i = 0; i < K; i++) {
+        scanf("%d", &N);
+        map<int, bool> checkRow;
+        map<int, bool> checkDiagonal1;
+        map<int, bool> checkDiagonal2;
+        for (int x = 1; x <= N; x++) {
+            int y;
+            scanf("%d", &y);
+            checkRow[y] = true;
+            checkDiagonal1[y - x] = true;
+            checkDiagonal2[y + x] = true;
         }
-        
-        for (int column = 1; column <= n; column++) {
-            int row = rows[column];
-            if (table1[row] || table2[row - column + 1000] || table3[row + column]) {
-                flag = false;
-                break;
-            }
-            table1[row] = true;
-            table2[row - column + 1000] = true;
-            table3[row + column] = true;
-        }
-        
-        if (flag) {
-            printf("YES\n");
-        } else {
+        if (checkRow.size() != N || checkDiagonal1.size() != N || checkDiagonal2.size() != N) {
             printf("NO\n");
+        } else {
+            printf("YES\n");
         }
     }
     return 0;
 }
-
-/*
-1
-5 1 3 5 2 4
- */
