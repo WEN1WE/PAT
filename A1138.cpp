@@ -40,6 +40,6 @@ int main() {
     for (int i = 0; i < N; i++) {
         scanf("%d", &inorder[i]);
     }
-    cout << find(0, N - 1, 0, N - 1) << endl;
+    printf("%d\n", find(0, N - 1, 0, N - 1));
     return 0;
 }
