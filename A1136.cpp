@@ -6,53 +6,45 @@
 #include <algorithm>
 using namespace std;
 
-string add(string & s) {
-    string s1 = s;
-    reverse(s1.begin(), s1.end());
+bool isPalindrome(string & original) {
+    string reversed = original;
+    reverse(reversed.begin(), reversed.end());
+    return reversed == original;
+}
+
+string add(string & original, string & reversed) {
     string result;
     int carry = 0;
-    int sum;
-    
-    for (int i = 0; i < s1.length(); i++) {
-        sum = s1[i] - '0' + s[i] - '0' + carry;
-        result.append(to_string(sum % 10));
+    for (int i = 0; i < original.size(); i++) {
+        int sum = original[i] - '0' + reversed[i] - '0' + carry;
+        int digit = sum % 10;
         carry = sum / 10;
+        result.append(to_string(digit));
     }
     if (carry != 0) {
         result.append(to_string(carry));
     }
     reverse(result.begin(), result.end());
-    printf("%s + %s = %s\n", s.c_str(), s1.c_str(), result.c_str());
-    
     return result;
 }
 
-bool isPalindrome (string & s) {
-    string temp = s;
-    reverse(temp.begin(), temp.end());
-    return temp == s;
-}
-
 int main() {
-    int count = 0;
-    string s;
-    cin >> s;
+    int cnt = 0;
+    string original;
+    cin >> original;
     
-    if (isPalindrome(s)) {
-        printf("%s is a palindromic number.\n", s.c_str());
-        return 0;
+    while (!isPalindrome(original) && cnt < 10) {
+        string reversed = original;
+        reverse(reversed.begin(), reversed.end());
+        printf("%s + %s = ", original.c_str(), reversed.c_str());
+        original = add(original, reversed);
+        printf("%s\n", original.c_str());
+        cnt++;
     }
-    
-    do {
-        s = add(s);
-        count++;
-    } while (!isPalindrome(s) && count < 10);
-    
-    if (isPalindrome(s)) {
-        printf("%s is a palindromic number.\n", s.c_str());
+    if (isPalindrome(original)) {
+        printf("%s is a palindromic number.\n", original.c_str());
     } else {
         printf("Not found in 10 iterations.\n");
     }
-    
     return 0;
 }
