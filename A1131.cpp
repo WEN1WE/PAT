@@ -5,111 +5,105 @@
  * 4. dfs什么时候需要记录visited
  * 5. 本题visited 只记录一次dfs的访问，所以需要回退时还原
  * 6. 本题使用Dijkstra最后一组数据超时，可能由于每次都要进行Dijkstra,当数据大时，效率很低
+ * 7. 多存数据，可以优化代码量
  */
 
-#include <iostream> 
-#include <vector>
+#include <iostream>
 #include <map>
+#include <vector>
 using namespace std;
 
-int start, destination;
-const int MAX = 10000;
-vector<int> adjoin[MAX];
-int visited[MAX];
+const int INF = 1000000000;
+const int MAX = 10010;
+vector<vector<int>> graph(MAX);
 map<int, int> mp;
-
+bool visited[MAX];
 vector<int> path;
 vector<int> tempPath;
-int minStop = MAX;
-int minTransfer = MAX;
+int start, destination;
+int minStops = INF;
+int minTransfers = INF;
 
-int transfer() {
-    int preLine, nextLine, curStop, cnt = 0;
-    preLine = mp[tempPath[0] * MAX + tempPath[1]];
-    curStop = tempPath[1];
-    for (int i = 2; i < tempPath.size(); i++) {
-        nextLine = mp[curStop * MAX + tempPath[i]];
-        if (preLine != nextLine) {
-            cnt++;
-        }
-        curStop = tempPath[i];
-        preLine = nextLine;
-    }
-    return cnt;
-}
-
-void dfs(int v, int cntStop) {
-    visited[v] = true;
-    tempPath.push_back(v);
-    if (v == destination) {
-        if (cntStop < minStop) {
-            path = tempPath;
-            minStop = cntStop;
-            minTransfer = transfer();
-        } else if (cntStop == minStop) {
-            int cntTransfer = transfer();
-            if (cntTransfer < minTransfer) {
-                path = tempPath;
-                minTransfer = cntTransfer;
-            }
-        }
-        visited[v] = false;
-        tempPath.pop_back();
+void dfs(int station, int stops, int transfers, int preLine) {
+    if (visited[station]) {
         return;
     }
-    
-    for (auto e : adjoin[v]) {
-        if (!visited[e])
-            dfs(e, cntStop + 1);
+    tempPath.push_back(station);
+    visited[station] = true;
+    if (station == destination) {
+        if (stops < minStops) {
+            minStops = stops;
+            path = tempPath;
+            minTransfers = transfers;
+        } else if (stops == minStops) {
+            if (transfers < minTransfers) {
+                minTransfers = transfers;
+                path = tempPath;
+            }
+        }
+        tempPath.pop_back();
+        visited[station] = false;
+        return;
     }
-    visited[v] = false;
+
+    for (auto e : graph[station]) {
+        int nextLine = mp[station * 10000 + e];
+        if (nextLine != preLine) {
+            dfs(e, stops + 1, transfers + 1, nextLine);
+        } else {
+            dfs(e, stops + 1, transfers, nextLine);
+        }
+    }
+
     tempPath.pop_back();
+    visited[station] = false;
 }
 
 void print() {
-    int begin, end;
-    int preLine, nextLine, curStop;
-    begin = path[0];
-    preLine = mp[path[0] * MAX + path[1]];
-    curStop = path[1];
-    for (int i = 2; i < path.size(); i++) {
-        nextLine = mp[curStop * MAX + path[i]];
-        if (preLine != nextLine) {
-            end = curStop;
-            printf("Take Line#%d from %04d to %04d.\n", preLine, begin, end);
-            begin = end;
+    int s1 = path[0];
+    int s2;
+    int preLine = mp[path[0] * 10000 + path[1]];
+    int curLine;
+
+    for (int i = 1; i < path.size() - 1; i++) {
+        curLine = mp[path[i] * 10000 + path[i + 1]];
+        if (preLine != curLine) {
+            s2 = path[i];
+            printf("Take Line#%d from %04d to %04d.\n", preLine, s1, s2);
+            preLine = curLine;
+            s1 = path[i];
         }
-        curStop = path[i];
-        preLine = nextLine;
     }
-    printf("Take Line#%d from %04d to %04d.\n", preLine, begin, destination);
+    s2 = path[path.size() - 1];
+    printf("Take Line#%d from %04d to %04d.\n", preLine, s1, s2);
 }
 
 int main() {
     int N, M, K;
     scanf("%d", &N);
-    
+
     for (int i = 1; i <= N; i++) {
         int pre, cur;
         scanf("%d %d", &M, &pre);
         for (int j = 1; j < M; j++) {
             scanf("%d", &cur);
-            mp[pre * MAX + cur] = i;
-            mp[cur * MAX + pre] = i;
-            adjoin[pre].push_back(cur);
-            adjoin[cur].push_back(pre);
+            mp[pre * 10000 + cur] = i;
+            mp[cur * 10000 + pre] = i;
+            graph[pre].push_back(cur);
+            graph[cur].push_back(pre);
             pre = cur;
         }
     }
-    
+
     scanf("%d", &K);
+
     for (int i = 0; i < K; i++) {
         scanf("%d %d", &start, &destination);
-        dfs(start, 0);
-        printf("%d\n", minStop);
+        dfs(start, 0, 0, -1);
+        printf("%d\n", path.size() - 1);
         print();
-        minStop = MAX;
-        minTransfer = MAX;
+        minStops = INF;
+        minTransfers = INF;
     }
     return 0;
 }
