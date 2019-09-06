@@ -7,42 +7,46 @@
 #include <iostream>
 #include <vector>
 using namespace std;
-vector<vector<int>> graph;
-int removed;
 
-void dfs(int v, vector<bool> & visited) {
+const int MAX = 1010;
+vector<vector<int>> graph(MAX);
+int visited[MAX];
+int occupied;
+
+void dfs(int v) {
+    if (visited[v]) {
+        return;
+    }
     visited[v] = true;
     for (auto e : graph[v]) {
-        if (!visited[e] && e != removed) {
-            dfs(e, visited);
-        }
+        if (e != occupied)
+            dfs(e);
     }
 }
 
 int main() {
-    int n, m, k;
-    scanf("%d %d %d", &n, &m, &k);
-    graph.resize(n + 1);
+    int N, M, K;
+    scanf("%d %d %d", &N, &M, &K);
     
-    for (int i = 0; i < m; i++) {
-        int v1, v2;
-        scanf("%d %d", &v1, &v2);
-        graph[v1].push_back(v2);
-        graph[v2].push_back(v1);
+    for (int i = 0; i < M; i++) {
+        int city1, city2;
+        scanf("%d %d", &city1, &city2);
+        graph[city1].push_back(city2);
+        graph[city2].push_back(city1);
     }
     
-    for (int i = 0; i < k; i++) {
-        int component = 0;
-        vector<bool> visited(n + 1);
-        scanf("%d", &removed);
-        for (int j = 1; j <= n; j++) {
-            if (!visited[j] && j != removed) {
-                component++;
-                dfs(j, visited);
+    for (int i = 0; i < K; i++) {
+        int cnt = 0;
+        scanf("%d", &occupied);
+        
+        for (int j = 1; j <= N; j++) {
+            if (j != occupied && !visited[j]) {
+                cnt++;
+                dfs(j);
             }
         }
-        cout << component - 1 << endl;
+        printf("%d\n", cnt - 1);
+        fill(visited, visited + MAX, false);
     }
-    
     return 0;
 }
