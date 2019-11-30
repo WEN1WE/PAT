@@ -5,6 +5,57 @@
  */
 
 #include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int N;
+    cin >> N;
+    vector<int> initial(N);
+    vector<int> partially(N);
+
+    for (int i = 0; i < N; i++) {
+        cin >> initial[i];
+    }
+    for (int i = 0; i < N; i++) {
+        cin >> partially[i];
+    }
+
+    int p, q;
+
+    for (p = 0; p < N - 1 && partially[p] <= partially[p + 1]; p++);
+    for (q = p + 1; q < N && initial[q] == partially[q]; q++);
+
+    if (q == N) {
+        printf("Insertion Sort\n");
+        sort(initial.begin(), initial.begin() + p + 2);
+    } else {
+        printf("Merge Sort\n");
+        int step = 2;
+        bool flag = true;
+        while (flag) {
+            if (initial == partially) {
+                flag = false;
+            }
+            for (int i = 0; i < N; i += step) {
+                sort(initial.begin() + i, initial.begin() + min(N, i + step));
+            }
+            step *= 2;
+        }
+    }
+    
+
+    for (int i = 0; i < N; i++) {
+        if (i != 0) {
+            printf(" ");
+        }
+        printf("%d", initial[i]);
+    }
+}
+
+
+#include <iostream>
 #include <algorithm>
 #include <vector>
 using namespace std;
