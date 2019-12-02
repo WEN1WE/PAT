@@ -4,6 +4,44 @@
  */
 
 #include <iostream>
+#include <unordered_map>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int cnt = 0;
+    string s, result, temp;
+    unordered_map<string, int> mp;
+    getline(cin, s);
+    s.append(1, '!');
+    
+    for (auto c : s) {
+        if (isalnum(c)) {
+            c = tolower(c);
+            temp.append(1, c);
+        } else if (!temp.empty()){
+            if (mp.find(temp) == mp.end()) {
+                mp[temp] = 1;
+            } else {
+                mp[temp]++;
+            }
+            if (mp[temp] > cnt || ((mp[temp] == cnt) && temp < result)) {
+                cnt = mp[temp];
+                result = temp;
+            }
+            temp.clear();
+        }
+    }
+    
+    cout << result << " " << cnt << endl;
+
+    return 0;
+}
+
+
+
+#include <iostream>
 #include <map>
 #include <vector>
 #include <algorithm>
