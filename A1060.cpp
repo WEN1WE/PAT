@@ -6,6 +6,78 @@
 #include <iostream>
 using namespace std;
 
+int N;
+
+string getForm (string & s){
+    string before, after;
+    string result;
+    bool flag1 = false, flag2 = false;
+    int K = 0;
+
+    for (int i = 0; i < s.length(); i++) {
+        if (s[i] == '.') {
+            flag2 = true;
+            continue;
+        }
+
+        if (!flag1 && s[i] != '0') {
+            flag1 = true;
+        }
+
+        if (flag1 && !flag2) {
+            before.append(1, s[i]);
+        } else if (flag2) {
+            after.append(1, s[i]);
+        }
+    }
+
+    if (before.empty()) {
+        bool flag = false;
+        for (int i = 0; i < after.size(); i++) {
+            if (after[i] != '0') {
+                K = -i;
+                result = after.substr(i);
+                flag = true;
+                break;
+            }
+        }
+        if (!flag) {
+            result = "0";
+            K = 0;
+        }
+    } else {
+        K = before.length();
+        result = before + after;
+    }
+
+    if (result.length() >= N) {
+        result = result.substr(0, N);
+    } else {
+        result.append(N - result.length(), '0');
+    }
+    return "0." + result + "*10^" + to_string(K);
+}
+
+int main() {
+    cin >> N;
+    string s1, s2;
+    string result1, result2;
+    cin >> s1 >> s2;
+    
+    result1 = getForm(s1);
+    result2 = getForm(s2);
+
+    if (result1 == result2) {
+        printf("YES %s\n", result1.c_str());
+    } else {
+        printf("NO %s %s\n", result1.c_str(), result2.c_str());
+    }
+    return 0;
+}
+
+#include <iostream>
+using namespace std;
+
 void addZero(string & s, int significant) {
     if (s.length() < significant) {
         s.append(significant - s.length(), '0');
