@@ -11,49 +11,43 @@ using namespace std;
 const int MAX = 100010;
 
 int main() {
-    vector<bool> prime(MAX, true);
+    vector<bool> table(MAX, true);
+
     for (int i = 2; i * i <= MAX; i++) {
-        for (int j = 2; j * i <= MAX; j++) {
-            prime[j * i] = false;
+        for (int j = 2; j * j <= MAX; j++) {
+            table[i * j] = false;
         }
     }
+    long long N;
+    cin >> N;
 
-    bool flag1 = false;
-    int n;
-    scanf("%d", &n);
-    printf("%d=", n);
-
-    if (n == 1) {
-        printf("1");
+    if (N == 1) {
+        cout << "1=1" << endl;
+        return 0;
+    } else {
+        cout<< N << "=";
     }
 
-    for (int i = 2; i < MAX; i++) {
-        int count = 0, flag2 = false;
-        while (prime[i] && n % i == 0) {
-            count++;
-            n /= i;
-            flag2 = true;
+    bool flag = false;
+    for (int i = 2; i <= MAX; i++) {
+        int cnt = 0;
+        while (table[i] && N % i == 0) {
+            cnt++;
+            N = N / i;
         }
-        if (flag2) {
-            if (flag1) {
-                printf("*");
-            }
-            printf("%d", i);
-            flag1 = true;
+        if (flag && cnt > 0) {
+            cout << "*";
         }
-
-        if (count > 1) {
-            printf("^%d", count);
+        if (cnt > 0) {
+            cout << i;
+            flag = true;
         }
-
-        if (n == 1) {
+        if (cnt > 1) {
+            cout << "^" << cnt;
+        }
+        if (N == 1) {
             break;
         }
     }
-
-    if(n != 1) {  // 如果无法被sqrt(n)以内的质因子除尽
-        printf("*%d", n);
-    }
-
     return 0;
 }
