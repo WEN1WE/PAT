@@ -8,6 +8,54 @@
 #include <vector>
 using namespace std;
 
+int main() {
+    int M, N, K;
+    cin >> M >> N >> K;
+
+    for (int i = 0; i < K; i++) {
+        vector<int> v(N);
+        stack<int> s;
+        int current = 1;
+        for (int j = 0; j < N; j++) {
+            cin >> v[j];
+        }
+        bool flag = true;
+        for (int j = 0; j < N; j++) {
+            while (true) {
+                if (s.empty() || s.top() != v[j]) {
+                    s.push(current);
+                    current++;
+                    if (s.size() > M) {
+                        flag = false;
+                        break;
+                    }
+                } else {
+                    s.pop();
+                    break;
+                }
+            }
+            if (!flag) {
+                break;
+            }
+        }
+
+        if (!flag || !s.empty()) {
+            printf("NO\n");
+        } else {
+            printf("YES\n");
+        }
+    }
+    return 0;
+}
+
+
+
+
+#include <iostream>
+#include <stack>
+#include <vector>
+using namespace std;
+
 bool judge(int size, int n, vector<int> & sequence) {
     int index = 0, current = 1;
     stack<int> st;
